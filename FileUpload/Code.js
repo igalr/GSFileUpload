@@ -109,7 +109,7 @@ class GSFileUploadService {
 
 let service = null;
 function doGet(e) {
-  let service = new GSFileUploadService();
+  service = new GSFileUploadService();
   return service.doGet(e);
 }
 
