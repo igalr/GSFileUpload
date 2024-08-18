@@ -54,12 +54,12 @@ const GSFileUpload = {
     let sheet = ssheet.getSheetByName(formObject.sheetname);
     let range = sheet.getRange(formObject.range);
 
-    var folder = DriveApp.getFolderById(folderID);
-    var fileUrl;
+    let folder = DriveApp.getFolderById(folderID);
+    let fileUrl;
 
     if (formObject.myFile.length > 0) {
-      var blob = formObject.myFile;
-      var file = folder.createFile(blob);
+      let blob = formObject.myFile;
+      let file = folder.createFile(blob);
       file.setDescription("Uploaded by " + Session.getEffectiveUser().getEmail());
       fileUrl = file.getUrl();
     } else {
