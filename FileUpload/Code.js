@@ -1,18 +1,12 @@
 class GSFileUploadPrep {
-  onOpen() {
-    Logger.log("GSFileUpload.onOpen");
-    SpreadsheetApp.getUi() // Or DocumentApp or FormApp.
-      .createMenu('Upload')
-      .addItem('Attach File', this.launchUploadPage)
-      .addToUi();
+  constructor() {
+    this.scriptURL = "https://script.google.com/a/macros/redleafsolutions.ca/s/AKfycbzgc-qOKU1GZtdtG7eGPyet8WdJ7RkawI1CENF1g0LpEFkwn1G-WoTKcDTCQmquK71X/exec";
+    this.formFile = "FileUpload/Index";
   }
-
-  #scriptURL = "https://script.google.com/a/macros/redleafsolutions.ca/s/AKfycbzgc-qOKU1GZtdtG7eGPyet8WdJ7RkawI1CENF1g0LpEFkwn1G-WoTKcDTCQmquK71X/exec";
-  #formFile = "FileUpload/Index";
 
   withUploadFolderID(folderid) {
     PropertiesService.getDocumentProperties().setProperty("GSFolderID", folderid);
-    PropertiesService.getDocumentProperties().setProperty("GSFormFile", this.#formFile);
+    PropertiesService.getDocumentProperties().setProperty("GSFormFile", this.formFile);
 
     return this;
   }
@@ -47,8 +41,9 @@ class GSFileUploadPrep {
     }
     let rstr = encodeURI(JSON.stringify(r));
 
+    Logger.log (`prep.launchUploadPage Opening ${this.scriptURL}?ssheetid=${ssheetid}&sheetname=${sheetname}&range=${notation}&row=${rstr}`);
     let html = '<html><body><script>';
-    html += `window.open ("${this.#scriptURL}?ssheetid=${ssheetid}&sheetname=${sheetname}&range=${notation}&row=${rstr}", "_blank");`;
+    html += `window.open ("${this.scriptURL}?ssheetid=${ssheetid}&sheetname=${sheetname}&range=${notation}&row=${rstr}", "_blank");`;
     html += 'google.script.host.close();';
     html += '</script></body></html>';
     SpreadsheetApp.getUi().showModelessDialog(HtmlService.createHtmlOutput(html).setHeight(1).setWidth(1), " ");
@@ -79,7 +74,7 @@ class GSFileUploadService {
     template.version = version;
     return template.evaluate();
   }
-  
+
   uploadFiles(formObject) {
     Logger.log("GSFileUpload.uploadFiles " + JSON.stringify(formObject));
 
@@ -114,13 +109,13 @@ class GSFileUploadService {
 
 let service = null;
 function doGet(e) {
-  let service = new GSFileUploadService ();
-  return service.doGet (e);
+  let service = new GSFileUploadService();
+  return service.doGet(e);
 }
 
 function GSUploadFiles(formObject) {
   if (service != null) {
     return service.uploadFiles(formObject);
   }
-  throw Error ("GSFileUploadService is not initialized");
+  throw Error("GSFileUpload Service is not initialized");
 }

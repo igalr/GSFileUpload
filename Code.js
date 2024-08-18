@@ -1,16 +1,12 @@
 function onOpen() {
-  let prep = GSFileUploadPrep ();
-  prep.onOpen ();
+  SpreadsheetApp.getUi() // Or DocumentApp or FormApp.
+  .createMenu('Upload')
+  .addItem('Attach File', "launchUploadPage")
+  .addToUi();
 }
 
-function onOpen_old () {
-    // Logger.log ("onOpen 1");
-  GSFileUpload.withUploadFolderID ("1V7UJvrcoF87ApQZzj95KdCUwwy3aAX60");
-  // Logger.log ("onOpen 2");
-  GSFileUpload.withCustomForm ("MyIndex");
-  // Logger.log ("onOpen 3");
-  GSFileUpload.onOpen ();
-  // Logger.log ("onOpen 4");
+function launchUploadPage () {
+  new GSFileUploadPrep ().launchUploadPage ();
 }
 
 // /* @Include JavaScript and CSS Files */
