@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
   <base target="_top">
@@ -19,7 +19,7 @@
           <input type="HIDDEN" name="range" value="<?= params.range ?>">
           <input name="myFile" class="xform-control-file" type="file" xid="FormControlFile" onchange="handleFiles(event)" />
           <input name="label" class="xform-control" type="text" id="filename" />
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary">Upload</button>
         </form>
         <br>
         <div id="output"></div>
@@ -28,6 +28,6 @@
   </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
-  <?!= HtmlService.createHtmlOutputFromFile("GSFileUploadScript").getContent() ?>
+  <?!= HtmlService.createHtmlOutputFromFile("FileUpload/JavaScript").getContent() ?>
 </body>
 </html>

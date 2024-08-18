@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+  <title>Upload File</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-6">
+        <form id="myForm" onsubmit="handleFormSubmit(this)">
+          <input type="HIDDEN" name="ssheetid" value="<?= params.ssheetid ?>">
+          <input type="HIDDEN" name="sheetname" value="<?= params.sheetname ?>">
+          <input type="HIDDEN" name="range" value="<?= params.range ?>">
+          <input name="myFile" class="form-control-file" type="file" xid="FormControlFile" onchange="handleFiles(event)" />
+          <input name="label" class="form-control" type="text" id="filename" />
+          <input name="data" class="form-control" type="text" id="filename" />
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <div id="output"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
+  <?!= include('MyJavaScript'); ?>
+  <script>
+    $("#myForm button").hide ();
+      function handleFiles (event) {
+        let value = event.target.value;
+        let lst = value.split ("/");
+        lst = lst[lst.length-1].split ("\\");
+        value = lst[lst.length-1];
+        $('#filename').val(value).select().focus();
+        $("#myForm button").show ();
+      }
+  </script>
+</body>
+
+</html>
