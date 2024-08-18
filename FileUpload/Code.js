@@ -1,39 +1,28 @@
-const GSFileUpload = {
-  withUploadFolderID(folderid) {
-    PropertiesService.getDocumentProperties().setProperty("GSFolderID", folderid);
-    PropertiesService.getDocumentProperties().setProperty("GSFormFile", "FileUpload/Index");
-
-    return this;
-  },
-
-  withCustomForm(filename) {
-    PropertiesService.getDocumentProperties().setProperty("GSFormFile", filename);
-    return this;
-  },
-
+class GSFileUploadPrep {
   onOpen() {
     Logger.log("GSFileUpload.onOpen");
     SpreadsheetApp.getUi() // Or DocumentApp or FormApp.
       .createMenu('Upload')
-      .addItem('Attach File', 'GSFileUpload.launchUploadPage')
+      .addItem('Attach File', this.launchUploadPage)
       .addToUi();
-  },
+  }
 
-  launchUploadPageLocal() {
-    let formFile = PropertiesService.getDocumentProperties().getProperty("GSFormFile");
-    Logger.log("Loading form " + formFile);
-    let template = HtmlService.createTemplateFromFile(formFile);
-    template.params = {
-      ssheetid: SpreadsheetApp.getActive().getId(),
-      sheetname: SpreadsheetApp.getActiveSheet().getName(),
-      range: SpreadsheetApp.getActiveRange().getA1Notation()
-    };
+  #scriptURL = "https://script.google.com/a/macros/redleafsolutions.ca/s/AKfycbzgc-qOKU1GZtdtG7eGPyet8WdJ7RkawI1CENF1g0LpEFkwn1G-WoTKcDTCQmquK71X/exec";
+  #formFile = "FileUpload/Index";
 
-    SpreadsheetApp.getUi ().showModalDialog (template.evaluate(), "Upload File");
-  },
+  withUploadFolderID(folderid) {
+    PropertiesService.getDocumentProperties().setProperty("GSFolderID", folderid);
+    PropertiesService.getDocumentProperties().setProperty("GSFormFile", this.#formFile);
+
+    return this;
+  }
+
+  withCustomForm(filename) {
+    PropertiesService.getDocumentProperties().setProperty("GSFormFile", filename);
+    return this;
+  }
 
   launchUploadPage() {
-    let scriptURL = "https://script.google.com/a/macros/redleafsolutions.ca/s/AKfycbzgc-qOKU1GZtdtG7eGPyet8WdJ7RkawI1CENF1g0LpEFkwn1G-WoTKcDTCQmquK71X/exec";
     let ssheetid = encodeURI(SpreadsheetApp.getActive().getId());
     let sheet = SpreadsheetApp.getActiveSheet();
     let sheetname = encodeURI(sheet.getName());
@@ -48,23 +37,49 @@ const GSFileUpload = {
     }
     let notation = encodeURI(range.getA1Notation());
 
-    let header = sheet.getRange (1, 1, 1, sheet.getDataRange().getNumColumns()).getValues ()[0];
-    let row = sheet.getRange (range.getRow (), 1, range.getRow(), sheet.getDataRange().getNumColumns()).getValues ()[0];
+    let header = sheet.getRange(1, 1, 1, sheet.getDataRange().getNumColumns()).getValues()[0];
+    let row = sheet.getRange(range.getRow(), 1, range.getRow(), sheet.getDataRange().getNumColumns()).getValues()[0];
     let r = {};
     for (let i in header) {
       if (header[i] != '') {
         r[header[i]] = row[i];
       }
     }
-    let rstr = encodeURI (JSON.stringify (r));
+    let rstr = encodeURI(JSON.stringify(r));
 
     let html = '<html><body><script>';
-    html += `window.open ("${scriptURL}?ssheetid=${ssheetid}&sheetname=${sheetname}&range=${notation}&row=${rstr}", "_blank");`;
+    html += `window.open ("${this.#scriptURL}?ssheetid=${ssheetid}&sheetname=${sheetname}&range=${notation}&row=${rstr}", "_blank");`;
     html += 'google.script.host.close();';
     html += '</script></body></html>';
     SpreadsheetApp.getUi().showModelessDialog(HtmlService.createHtmlOutput(html).setHeight(1).setWidth(1), " ");
-  },
+  }
 
+  launchUploadPageLocal() {
+    let formFile = PropertiesService.getDocumentProperties().getProperty("GSFormFile");
+    Logger.log("Loading form " + formFile);
+    let template = HtmlService.createTemplateFromFile(formFile);
+    template.params = {
+      ssheetid: SpreadsheetApp.getActive().getId(),
+      sheetname: SpreadsheetApp.getActiveSheet().getName(),
+      range: SpreadsheetApp.getActiveRange().getA1Notation()
+    };
+
+    SpreadsheetApp.getUi().showModalDialog(template.evaluate(), "Upload File");
+  }
+}
+
+class GSFileUploadService {
+  doGet(e) {
+    Logger.log(JSON.stringify(e.parameter));
+    let formFile = PropertiesService.getDocumentProperties().getProperty("GSFormFile");
+    Logger.log("Loading form " + formFile);
+    let template = HtmlService.createTemplateFromFile(formFile);
+    template.params = e.parameter;
+    template.row = JSON.parse(e.parameter.row);
+    template.version = version;
+    return template.evaluate();
+  }
+  
   uploadFiles(formObject) {
     Logger.log("GSFileUpload.uploadFiles " + JSON.stringify(formObject));
 
@@ -97,17 +112,15 @@ const GSFileUpload = {
   }
 }
 
+let service = null;
 function doGet(e) {
-  Logger.log(JSON.stringify(e.parameter));
-  let formFile = PropertiesService.getDocumentProperties().getProperty("GSFormFile");
-  Logger.log("Loading form " + formFile);
-  let template = HtmlService.createTemplateFromFile(formFile);
-  template.params = e.parameter;
-  template.row = JSON.parse (e.parameter.row);
-  template.version = version;
-  return template.evaluate();
+  let service = new GSFileUploadService ();
+  return service.doGet (e);
 }
 
 function GSUploadFiles(formObject) {
-  return GSFileUpload.uploadFiles(formObject);
+  if (service != null) {
+    return service.uploadFiles(formObject);
+  }
+  throw Error ("GSFileUploadService is not initialized");
 }
