@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+  <title>Upload File</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-6">
+
+        <form id="myForm" onsubmit="handleFormSubmit(this)">
+          <input type="HIDDEN" name="ssheetid" value="<?= params.ssheetid ?>">
+          <input type="HIDDEN" name="sheetname" value="<?= params.sheetname ?>">
+          <input type="HIDDEN" name="range" value="<?= params.range ?>">
+          <input name="myFile" class="xform-control-file" type="file" xid="FormControlFile" onchange="handleFiles(event)" />
+          <input name="label" class="xform-control" type="text" id="filename" />
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <br>
+        <div id="output"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
+  <?!= HtmlService.createHtmlOutputFromFile("GSFileUploadScript").getContent() ?>
+</body>
+</html>
