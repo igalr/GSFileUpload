@@ -56,10 +56,10 @@ const GSFileUpload = {
         r[header[i]] = row[i];
       }
     }
-    r = encodeURI (JSON.stringify (r));
+    let rstr = encodeURI (JSON.stringify (r));
 
     let html = '<html><body><script>';
-    html += `window.open ("${scriptURL}?ssheetid=${ssheetid}&sheetname=${sheetname}&range=${notation}&row=${r}", "_blank");`;
+    html += `window.open ("${scriptURL}?ssheetid=${ssheetid}&sheetname=${sheetname}&range=${notation}&row=${rstr}", "_blank");`;
     html += 'google.script.host.close();';
     html += '</script></body></html>';
     SpreadsheetApp.getUi().showModelessDialog(HtmlService.createHtmlOutput(html).setHeight(1).setWidth(1), " ");
@@ -75,12 +75,12 @@ const GSFileUpload = {
     let range = sheet.getRange(formObject.range);
 
     Logger.log("Upload folder " + folderID);
-    var folder = DriveApp.getFolderById(folderID);
-    var fileUrl;
+    let folder = DriveApp.getFolderById(folderID);
+    let fileUrl;
 
     if (formObject.myFile.length > 0) {
-      var blob = formObject.myFile;
-      var file = folder.createFile(blob);
+      let blob = formObject.myFile;
+      let file = folder.createFile(blob);
       file.setDescription("Uploaded by " + Session.getEffectiveUser().getEmail());
       fileUrl = file.getUrl();
     } else {
@@ -103,7 +103,7 @@ function doGet(e) {
   Logger.log("Loading form " + formFile);
   let template = HtmlService.createTemplateFromFile(formFile);
   template.params = e.parameter;
-  template.row = e.parameter.row;
+  template.row = JSON.parse (e.parameter.row);
   return template.evaluate();
 }
 
