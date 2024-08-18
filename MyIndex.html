@@ -21,8 +21,10 @@
           <input type="HIDDEN" name="range" value="<?= params.range ?>">
           <input name="myFile" class="form-control-file" type="file" xid="FormControlFile"
             onchange="handleFiles(event)" />
-          <input name="label" class="form-control" type="text" id="filename" />
-          <input name="data" class="form-control" type="text" id="filename" />
+          Label <input name="label" class="form-control" type="text" id="filename" />
+          First Name <input name="fname" class="form-control" type="text" value="<?= row['First Name'] ?>" />
+          Last Name <input name="lname" class="form-control" type="text" value="<?= row['Last Name'] ?>" />
+          Gender <input name="gender" class="form-control" type="text" value="<?= row.Gender ?>" />
           <button type="submit" class="btn btn-primary">Submit</button>
         </form>
       </div>
