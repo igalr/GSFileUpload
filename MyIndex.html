@@ -36,7 +36,7 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <div id="version" xstyle="position: absolute; bottom: 0px">Version Unknown</div>
+        <div xstyle="position: absolute; bottom: 0px">Version <?= version.version ?></div>
       </div>
     </div>
   </div>
@@ -46,7 +46,6 @@
   <script>
     $(document).ready(function () {
       $("#myForm button").hide();
-      $("#version").html("Version " + version.version);
     });
 
     function handleFiles(event) {

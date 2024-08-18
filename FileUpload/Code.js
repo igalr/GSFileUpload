@@ -104,6 +104,7 @@ function doGet(e) {
   let template = HtmlService.createTemplateFromFile(formFile);
   template.params = e.parameter;
   template.row = JSON.parse (e.parameter.row);
+  template.version = version;
   return template.evaluate();
 }
 
