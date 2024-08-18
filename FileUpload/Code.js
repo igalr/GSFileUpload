@@ -107,15 +107,10 @@ class GSFileUploadService {
   }
 }
 
-let service = null;
 function doGet(e) {
-  service = new GSFileUploadService();
-  return service.doGet(e);
+  return new GSFileUploadService().doGet(e);
 }
 
 function GSUploadFiles(formObject) {
-  if (service != null) {
-    return service.uploadFiles(formObject);
-  }
-  throw Error("GSFileUpload Service is not initialized");
+  return new GSFileUploadPrep ().uploadFiles(formObject);
 }
