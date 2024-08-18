@@ -1,6 +1,6 @@
 function onOpen() {
   // Logger.log ("onOpen 1");
-  GSFileUpload.withUploadFolderID ("1U7_DaKddvEDlXfw1iSmke_7Y-v_c4nRQ");
+  GSFileUpload.withUploadFolderID ("1V7UJvrcoF87ApQZzj95KdCUwwy3aAX60");
   // Logger.log ("onOpen 2");
   GSFileUpload.withCustomForm ("MyIndex");
   // Logger.log ("onOpen 3");

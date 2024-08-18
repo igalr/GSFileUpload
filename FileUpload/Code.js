@@ -33,7 +33,7 @@ const GSFileUpload = {
   },
 
   launchUploadPage() {
-    let scriptURL = "https://script.google.com/macros/s/AKfycbySRK7iaGhd0VCfjSPaVoiV8WXUixEI9ZYKFP1M7qRnM_yXFa6JK7LM_iml92t4RhBp/exec";
+    let scriptURL = "https://script.google.com/a/macros/redleafsolutions.ca/s/AKfycbzgc-qOKU1GZtdtG7eGPyet8WdJ7RkawI1CENF1g0LpEFkwn1G-WoTKcDTCQmquK71X/exec";
     let ssheetid = encodeURI(SpreadsheetApp.getActive().getId());
     let sheetname = encodeURI(SpreadsheetApp.getActiveSheet().getName());
     let range = SpreadsheetApp.getActiveRange();
